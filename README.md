@@ -23,14 +23,14 @@ claude-history distills 900MB of raw logs into a 28MB searchable database, then 
 **As a Claude Code plugin (recommended):**
 
 ```bash
-/install-plugin <repo-url>
+/install-plugin https://github.com/corvo007/claude-history
 # Done. Restart Claude Code.
 ```
 
 **Manual setup:**
 
 ```bash
-git clone <repo-url> && cd claude-history
+git clone https://github.com/corvo007/claude-history && cd claude-history
 uv run python setup.py    # Auto-detects GPU, installs deps, builds index, configures MCP
 ```
 
@@ -150,7 +150,7 @@ turns_fts  -- FTS5 full-text index
 | Stability | 81 issues, 14GB mem leak, 158GB disk fill | Single-file Python, WAL mode |
 | Dependencies | 501 MB node_modules | ~750 MB pip (CPU) |
 
-See the [full analysis](docs/plans/2026-04-16-claude-history-cleaner.md).
+See the [full design document](docs/plans/2026-04-16-design-doc-en.md).
 
 ---
 
@@ -180,7 +180,7 @@ claude-history 将 900MB 原始日志提炼为 28MB 可搜索数据库，几秒�
 **手动安装：**
 
 ```bash
-git clone <repo-url> && cd claude-history
+git clone https://github.com/corvo007/claude-history && cd claude-history
 uv run python setup.py    # 自动检测 GPU、安装依赖、构建索引、配置 MCP
 ```
 
@@ -300,4 +300,4 @@ turns_fts  -- FTS5 全文索引
 | 稳定性 | 81 个 issue，14GB 内存泄漏，158GB 磁盘填满 | 单文件 Python，WAL 模式 |
 | 依赖体积 | 501 MB node_modules | ~750 MB pip（CPU）|
 
-详见[完整调研分析](docs/plans/2026-04-16-claude-history-cleaner.md)。
+详见[完整设计文档](docs/plans/2026-04-16-claude-history-cleaner.md)。
