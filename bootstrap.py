@@ -5,6 +5,7 @@ Usage: python bootstrap.py <script.py> [args...]
 """
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +13,30 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).parent.resolve()
 VENV_DIR = PROJECT_DIR / ".venv"
 VENV_PYTHON = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin") / "python"
+VENV_PIP = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin") / "pip"
+
+
+def _has_command(name: str) -> bool:
+    return shutil.which(name) is not None
+
+
+def _ensure_uv():
+    """Install uv if not present."""
+    if _has_command("uv"):
+        return
+    print("Installing uv...", file=sys.stderr)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "uv"],
+        capture_output=True,
+    )
+
+
+def _has_gpu() -> bool:
+    try:
+        r = subprocess.run(["nvidia-smi"], capture_output=True, timeout=10)
+        return r.returncode == 0
+    except Exception:
+        return False
 
 
 def ensure_venv():
@@ -19,24 +44,14 @@ def ensure_venv():
     if VENV_PYTHON.exists():
         return
 
-    # Create venv with uv
-    subprocess.run(
-        ["uv", "sync"],
-        cwd=str(PROJECT_DIR),
-        capture_output=True,
-    )
+    _ensure_uv()
 
-    # Try GPU deps if nvidia-smi available
-    try:
-        r = subprocess.run(["nvidia-smi"], capture_output=True, timeout=10)
-        if r.returncode == 0:
-            subprocess.run(
-                ["uv", "sync", "--extra", "gpu"],
-                cwd=str(PROJECT_DIR),
-                capture_output=True,
-            )
-    except Exception:
-        pass
+    gpu = _has_gpu()
+    cmd = ["uv", "sync"]
+    if gpu:
+        cmd += ["--extra", "gpu"]
+
+    subprocess.run(cmd, cwd=str(PROJECT_DIR), capture_output=True)
 
 
 def main():

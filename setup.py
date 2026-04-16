@@ -1,13 +1,14 @@
 """One-click setup for claude-history.
 
 Usage:
-    uv run python setup.py          # Auto-detect GPU
-    uv run python setup.py --cpu    # Force CPU only
-    uv run python setup.py --skip-index  # Config only, skip initial indexing
+    python setup.py              # Auto-detect GPU, installs uv if needed
+    python setup.py --cpu        # Force CPU only
+    python setup.py --skip-index # Config only, skip initial indexing
 """
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -48,9 +49,18 @@ def check_gpu() -> bool:
         return False
 
 
+def ensure_uv():
+    """Install uv if not present."""
+    if shutil.which("uv"):
+        return
+    print("  uv not found, installing via pip...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "uv"], check=True)
+
+
 def install_deps(use_gpu: bool):
     """Install Python dependencies via uv."""
     print("\n[1/4] Installing dependencies...")
+    ensure_uv()
     cmd = ["uv", "sync"]
     if use_gpu:
         cmd += ["--extra", "gpu"]
