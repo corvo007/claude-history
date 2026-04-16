@@ -1,0 +1,21 @@
+[project]
+name = "claude-history"
+version = "0.1.0"
+description = "Clean and structure Claude Code conversation history"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastembed>=0.8.0",
+    "fastmcp>=3.2.4",
+    "sqlite-vec>=0.1.9",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "onnxruntime-gpu>=1.24.4",
+    "nvidia-cudnn-cu12>=9.21.0.82",
+    "nvidia-cuda-runtime-cu12>=12.9.79",
+]
+
+[project.scripts]
+claude-history = "clean:main"

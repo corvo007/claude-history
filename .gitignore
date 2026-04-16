@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environment
+.venv/
+
+# Database output
+history.db
+history-*.db
+
+# UV
+uv.lock
+
+# OS
+.DS_Store
+Thumbs.db

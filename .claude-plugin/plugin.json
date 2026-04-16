@@ -1,0 +1,23 @@
+{
+  "name": "claude-history",
+  "version": "0.1.0",
+  "description": "Clean, embed, and search Claude Code conversation history. Replaces episodic-memory with better Chinese support, GPU acceleration, and hybrid search.",
+  "author": {
+    "name": "oscar"
+  },
+  "license": "MIT",
+  "keywords": ["history", "search", "memory", "conversations", "embedding"],
+  "agents": ["./agents/search-history.md"],
+  "mcpServers": {
+    "claude-history": {
+      "command": "python",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/bootstrap.py",
+        "${CLAUDE_PLUGIN_ROOT}/mcp_server.py"
+      ],
+      "env": {
+        "CLAUDE_HISTORY_DB": "${CLAUDE_PLUGIN_ROOT}/history.db"
+      }
+    }
+  }
+}
