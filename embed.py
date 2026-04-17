@@ -240,7 +240,7 @@ def populate_fts(conn: sqlite3.Connection):
     fts_count = conn.execute("SELECT COUNT(*) FROM turns_fts").fetchone()[0]
     turns_count = conn.execute("SELECT COUNT(*) FROM turns").fetchone()[0]
 
-    if fts_count < turns_count:
+    if fts_count != turns_count:
         conn.execute("INSERT INTO turns_fts(turns_fts) VALUES('rebuild')")
         conn.commit()
         fts_count = conn.execute("SELECT COUNT(*) FROM turns_fts").fetchone()[0]

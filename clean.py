@@ -363,6 +363,12 @@ def write_session(conn: sqlite3.Connection, data: dict):
     if existing_turn_ids:
         placeholders = ",".join("?" * len(existing_turn_ids))
         conn.execute(f"DELETE FROM tool_calls WHERE turn_id IN ({placeholders})", existing_turn_ids)
+        has_vec = conn.execute("SELECT 1 FROM sqlite_master WHERE name='vec_turns'").fetchone()
+        if has_vec:
+            conn.execute(f"DELETE FROM vec_turns WHERE turn_id IN ({placeholders})", existing_turn_ids)
+        has_fts = conn.execute("SELECT 1 FROM sqlite_master WHERE name='turns_fts'").fetchone()
+        if has_fts:
+            conn.execute("INSERT INTO turns_fts(turns_fts) VALUES('rebuild')")
         conn.execute("DELETE FROM turns WHERE session_id=?", (session_id,))
 
     # Insert turns
